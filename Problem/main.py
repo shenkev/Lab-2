@@ -10,9 +10,8 @@ import torch
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 
-from util import *
-from model import MultiLayerPerceptron
-from dataset import AdultDataset
+from Problem.model import MultiLayerPerceptron
+from Problem.dataset import AdultDataset
 
 
 """ Adult income classification
