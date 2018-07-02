@@ -10,8 +10,9 @@ import torch
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 
-from Problem.model import MultiLayerPerceptron
-from Problem.dataset import AdultDataset
+from util import *
+from model import MultiLayerPerceptron
+from dataset import AdultDataset
 
 
 """ Adult income classification
@@ -87,6 +88,11 @@ categorical_feats =['workclass', 'race', 'education', 'marital-status', 'occupat
 for feature in categorical_feats:
     print(feature)
     print(data[feature].value_counts())
+
+# visualize the first 3 features
+for i in range(3):
+    binary_bar_chart(data, categorical_feats[i])
+    pie_chart(data, categorical_feats[i])
 
 ###############
 # DATASET BALANCING    #
