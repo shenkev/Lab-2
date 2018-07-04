@@ -164,8 +164,8 @@ def evaluate(model, test_loader):
 def main():
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--batch_size', type=int, default=64)
-    parser.add_argument('--lr', type=float, default=1.0)
+    parser.add_argument('--batch_size', type=int)
+    parser.add_argument('--lr', type=float)
     parser.add_argument('--epochs', type=int, default=100)
     parser.add_argument('--eval_every', type=int, default=10)
 

@@ -20,6 +20,9 @@ from dataset import AdultDataset
 In this lab we will build our own neural network pipeline to do classification on the adult income dataset. More
 information on the dataset can be found here: http://www.cs.toronto.edu/~delve/data/adult/adultDetail.html
 """
+
+from logger import Logger
+
 seed = 0
 
 ###############
@@ -90,9 +93,9 @@ for feature in categorical_feats:
     print(data[feature].value_counts())
 
 # visualize the first 3 features
-for i in range(3):
-    binary_bar_chart(data, categorical_feats[i])
-    pie_chart(data, categorical_feats[i])
+# for i in range(3):
+#     binary_bar_chart(data, categorical_feats[i])
+#     pie_chart(data, categorical_feats[i])
 
 ###############
 # DATASET BALANCING    #
@@ -182,8 +185,11 @@ def main():
     parser.add_argument('--lr', type=float, default=1.0)
     parser.add_argument('--epochs', type=int, default=100)
     parser.add_argument('--eval_every', type=int, default=10)
+    parser.add_argument('--run_name', type=str, default='run')
 
     args = parser.parse_args()
+
+    logger = Logger('./logs/' + args.run_name)
 
     train_loader, test_loader, model, loss_fnc, optimizer = load_data(args.batch_size, args.lr)
 
@@ -219,14 +225,18 @@ def main():
 
             # evaluate the model on the test set every eval_every steps
             if (t+1) % args.eval_every == 0:
-                test_corr = evaluate(model, test_loader)
+                test_acc = evaluate(model, test_loader)
+
+                logger.scalar_summary('print_loss', print_loss, t)
+                logger.scalar_summary('test_acc', test_acc, t)
                 print("Epoch: {}, Step {} | Loss: {} | Time: {} | Test acc: {}".format(epoch+1, t+1,
-                                                                          print_loss / 100, time() - tic, test_corr))
+                                                                          print_loss / 100, time() - tic, test_acc))
                 print_loss, tic = 0, time()
 
             t = t + 1
 
         print("Train acc: {}".format(float(tot_corr)/len(train_loader.dataset)))
+        logger.scalar_summary('Train acc', float(tot_corr)/len(train_loader.dataset), t)
 
 
 if __name__ == "__main__":
